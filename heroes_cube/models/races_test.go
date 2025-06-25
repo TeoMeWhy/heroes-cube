@@ -33,8 +33,8 @@ func TestImportRaces(t *testing.T) {
 	}{
 		{
 			name:                    "Importar raça Humano",
-			raceName:                "Human",
-			expectedRaceName:        "Human",
+			raceName:                "Humano",
+			expectedRaceName:        "Humano",
 			expectedModStrength:     1,
 			expectedModDexterity:    1,
 			expectedModIntelligence: 1,
@@ -43,8 +43,8 @@ func TestImportRaces(t *testing.T) {
 		},
 		{
 			name:                    "Importar raça Elfo",
-			raceName:                "Elf",
-			expectedRaceName:        "Elf",
+			raceName:                "Elfo",
+			expectedRaceName:        "Elfo",
 			expectedModStrength:     0,
 			expectedModDexterity:    2,
 			expectedModIntelligence: 1,
@@ -53,8 +53,8 @@ func TestImportRaces(t *testing.T) {
 		},
 		{
 			name:                    "Importar raça Anão",
-			raceName:                "Dwarf",
-			expectedRaceName:        "Dwarf",
+			raceName:                "Anão",
+			expectedRaceName:        "Anão",
 			expectedModStrength:     2,
 			expectedModDexterity:    1,
 			expectedModIntelligence: 0,
@@ -62,13 +62,13 @@ func TestImportRaces(t *testing.T) {
 			expectError:             nil,
 		},
 		{
-			name:                    "Importar raça Hobit",
-			raceName:                "Halfling",
-			expectedRaceName:        "Halfling",
+			name:                    "Importar raça Hobbit",
+			raceName:                "Hobbit",
+			expectedRaceName:        "Hobbit",
 			expectedModStrength:     0,
 			expectedModDexterity:    2,
 			expectedModIntelligence: 0,
-			expectedModWisdom:       1,
+			expectedModWisdom:       2,
 			expectError:             nil,
 		},
 	}

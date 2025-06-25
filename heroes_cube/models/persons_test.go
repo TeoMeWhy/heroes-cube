@@ -36,9 +36,9 @@ func TestImportPerson(t *testing.T) {
 	}{
 		{
 			name:                 "Cria Humano Guerreiro",
-			RaceName:             "Human",
+			RaceName:             "Humano",
 			ClassName:            "Warrior",
-			expectedRaceName:     "Human",
+			expectedRaceName:     "Humano",
 			expectedClassName:    "Warrior",
 			expectedStrength:     5,
 			expectedDexterity:    3,
@@ -48,9 +48,9 @@ func TestImportPerson(t *testing.T) {
 		},
 		{
 			name:                 "Importar Humano Ladinho",
-			RaceName:             "Human",
+			RaceName:             "Humano",
 			ClassName:            "Rogue",
-			expectedRaceName:     "Human",
+			expectedRaceName:     "Humano",
 			expectedClassName:    "Rogue",
 			expectedStrength:     2,
 			expectedDexterity:    6,
@@ -60,9 +60,9 @@ func TestImportPerson(t *testing.T) {
 		},
 		{
 			name:                 "Importar Humano Mago",
-			RaceName:             "Human",
+			RaceName:             "Humano",
 			ClassName:            "Mage",
-			expectedRaceName:     "Human",
+			expectedRaceName:     "Humano",
 			expectedClassName:    "Mage",
 			expectedStrength:     1,
 			expectedDexterity:    3,
@@ -72,9 +72,9 @@ func TestImportPerson(t *testing.T) {
 		},
 		{
 			name:                 "Importar Humano Clerigo",
-			RaceName:             "Human",
+			RaceName:             "Humano",
 			ClassName:            "Cleric",
-			expectedRaceName:     "Human",
+			expectedRaceName:     "Humano",
 			expectedClassName:    "Cleric",
 			expectedStrength:     1,
 			expectedDexterity:    2,
