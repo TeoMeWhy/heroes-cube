@@ -8,6 +8,8 @@ type Config struct {
 	DbHost string `default:"127.0.0.1" split_words:"true"`
 	DbPort string `default:"3306" split_words:"true"`
 	DbName string `default:"heroes" split_words:"true"`
+
+	ServerPort string `default:"8080" split_words:"true"`
 }
 
 func LoadConfig() (*Config, error) {
