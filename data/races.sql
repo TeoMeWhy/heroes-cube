@@ -8,8 +8,8 @@ INSERT INTO races (
     mod_intelligence,
     mod_wisdom
 ) VALUES
-    ('Human', 'Versatile and adaptable, humans excel in all areas.',1,1,1,1),
-    ('Elf', 'Graceful and agile, elves are masters of archery and magic.',0,2,1,1),
-    ('Dwarf', 'Sturdy and resilient, dwarves are skilled craftsmen and warriors.',2,1,0,1),
-    ('Halfling', 'Quick and clever, halflings excel in stealth and agility.',0,2,0,1)
+    ('Humano', 'Versátil e adaptável, humanos de destacam em todas áreas.',1,1,1,1),
+    ('Elfo', 'Cheios de graça e ágeis, elfos são mestres de arco e magia.',0,2,1,1),
+    ('Anão', 'Resistentes e resilientes, anões são excelentes construtores e guerreiros.',2,1,0,1),
+    ('Hobbit', 'Rápidos e ligeiros, hobbits se destacam em furtividade e agilidade.',0,2,0,2)
 ;

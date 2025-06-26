@@ -33,8 +33,8 @@ func TestImportClasses(t *testing.T) {
 	}{
 		{
 			name:                 "Importar raça Guerreiro",
-			ClassName:            "Warrior",
-			expectedClassName:    "Warrior",
+			ClassName:            "Guerreiro",
+			expectedClassName:    "Guerreiro",
 			expectedStrength:     5,
 			expectedDexterity:    3,
 			expectedIntelligence: 2,
@@ -43,8 +43,8 @@ func TestImportClasses(t *testing.T) {
 		},
 		{
 			name:                 "Importar raça Ladinho",
-			ClassName:            "Rogue",
-			expectedClassName:    "Rogue",
+			ClassName:            "Ladino",
+			expectedClassName:    "Ladino",
 			expectedStrength:     2,
 			expectedDexterity:    6,
 			expectedIntelligence: 2,
@@ -53,8 +53,8 @@ func TestImportClasses(t *testing.T) {
 		},
 		{
 			name:                 "Importar raça Mago",
-			ClassName:            "Mage",
-			expectedClassName:    "Mage",
+			ClassName:            "Mago",
+			expectedClassName:    "Mago",
 			expectedStrength:     1,
 			expectedDexterity:    3,
 			expectedIntelligence: 6,
@@ -63,8 +63,8 @@ func TestImportClasses(t *testing.T) {
 		},
 		{
 			name:                 "Importar raça Clerigo",
-			ClassName:            "Cleric",
-			expectedClassName:    "Cleric",
+			ClassName:            "Clérigo",
+			expectedClassName:    "Clérigo",
 			expectedStrength:     1,
 			expectedDexterity:    2,
 			expectedIntelligence: 3,

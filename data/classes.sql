@@ -8,8 +8,8 @@ INSERT INTO classes (
     initial_intelligence,
     initial_wisdom
 ) VALUES
-('Warrior', 'A strong and resilient fighter, skilled in melee combat.', 5, 3, 2, 2),
-('Rogue', 'A stealthy and agile character, adept at sneaking and dealing critical hits.', 2, 6, 2, 2),
-('Mage', 'A master of arcane arts, capable of casting powerful spells.', 1, 3, 6, 2),
-('Cleric', 'A holy warrior with healing abilities and divine magic.', 1, 2, 3, 6);
+('Guerreiro', 'Um forte e resistente lutador.', 5, 3, 2, 2),
+('Ladino', 'Um personagem furtivo e ágil, habilidoso em se esgueirar e desferir golpes críticos.', 2, 6, 2, 2),
+('Mago', 'Um mestre das artes arcanas, capaz de lançar poderosos feitiços.', 1, 3, 6, 2),
+('Clérigo', 'Um guerreiro sagrado com habilidades de cura e magia divina.', 1, 2, 3, 6);
 
