@@ -2,10 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
-// classes: Guerreiro, Mago, Clérigo, Ladino
-// raças: Humano, Elfo, Anão, Halfling
-
-type Person struct {
+type Creature struct {
 	Id              string     `json:"id" gorm:"primaryKey"`
 	RaceName        string     `json:"race_name" gorm:"type:varchar(100);not null;"`
 	Race            Race       `json:"race" gorm:"foreignKey:RaceName;references:Name"`
@@ -20,90 +17,90 @@ type Person struct {
 	Inventory       *Inventory `json:"inventory" gorm:"foreignKey:InventoryId;references:Id"`
 }
 
-func (p *Person) GetStrength() int {
+func (creature *Creature) GetStrength() int {
 
 	itemsStrength := 0
-	for _, item := range p.Inventory.Items {
+	for _, item := range creature.Inventory.Items {
 		itemsStrength += item.ModStrength
 	}
-	return p.PtsStrength + p.Race.ModStrength + itemsStrength
+	return creature.PtsStrength + creature.Race.ModStrength + itemsStrength
 }
 
-func (p *Person) GetDexterity() int {
+func (creature *Creature) GetDexterity() int {
 
 	itemsDexterity := 0
-	for _, item := range p.Inventory.Items {
+	for _, item := range creature.Inventory.Items {
 		itemsDexterity += item.ModDexterity
 	}
 
-	return p.PtsDexterity + p.Race.ModDexterity + itemsDexterity
+	return creature.PtsDexterity + creature.Race.ModDexterity + itemsDexterity
 }
 
-func (p *Person) GetIntelligence() int {
+func (creature *Creature) GetIntelligence() int {
 
 	itemsIntelligence := 0
-	for _, item := range p.Inventory.Items {
+	for _, item := range creature.Inventory.Items {
 		itemsIntelligence += item.ModIntelligence
 	}
 
-	return p.PtsIntelligence + p.Race.ModIntelligence + itemsIntelligence
+	return creature.PtsIntelligence + creature.Race.ModIntelligence + itemsIntelligence
 }
 
-func (p *Person) GetWisdom() int {
+func (creature *Creature) GetWisdom() int {
 
 	itemsWisdom := 0
-	for _, item := range p.Inventory.Items {
+	for _, item := range creature.Inventory.Items {
 		itemsWisdom += item.ModWisdom
 	}
 
-	return p.PtsWisdom + p.Race.ModWisdom + itemsWisdom
+	return creature.PtsWisdom + creature.Race.ModWisdom + itemsWisdom
 }
 
-func (p *Person) SetHitPoints() {
-	p.PtsHitPoints = 10 + p.GetStrength()
+func (creature *Creature) SetHitPoints() {
+	creature.PtsHitPoints = 10 + creature.GetStrength()
 }
 
-func (p *Person) GetDamage() int {
+func (creature *Creature) GetInventoryDamage() int {
 
 	itemsDamage := 0
-	for _, item := range p.Inventory.Items {
+	for _, item := range creature.Inventory.Items {
 		itemsDamage += item.Damage
 	}
 	return itemsDamage
 
 }
 
-func (p *Person) Save(db *gorm.DB) error {
+func (creature *Creature) Save(db *gorm.DB) error {
 
-	if err := db.Save(p).Error; err != nil {
+	if err := db.Save(creature).Error; err != nil {
 		return err
 	}
 
-	if err := p.Inventory.Save(db); err != nil {
+	if err := creature.Inventory.Save(db); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func GetPerson(db *gorm.DB, id string) (*Person, error) {
-	p := &Person{Id: id}
+func GetCreature(db *gorm.DB, id string) (*Creature, error) {
+	creature := &Creature{Id: id}
 
 	err := db.
 		Preload("Race").
 		Preload("Class").
 		Preload("Inventory").
 		Preload("Inventory.Items").
-		First(p).Error
+		First(creature).Error
 
 	if err != nil {
 		return nil, err
 	}
 
-	return p, nil
+	return creature, nil
 }
 
-func NewPerson(id, raceName, className string, db *gorm.DB) (*Person, error) {
+func NewCreature(id, raceName, className string, db *gorm.DB) (*Creature, error) {
 
 	c, err := GetClass(db, className)
 	if err != nil {
@@ -115,7 +112,7 @@ func NewPerson(id, raceName, className string, db *gorm.DB) (*Person, error) {
 		return nil, err
 	}
 
-	p := &Person{
+	creature := &Creature{
 		Id:              id,
 		RaceName:        raceName,
 		ClassName:       className,
@@ -128,7 +125,7 @@ func NewPerson(id, raceName, className string, db *gorm.DB) (*Person, error) {
 		Inventory:       NewInventory(id),
 	}
 
-	p.SetHitPoints()
+	creature.SetHitPoints()
 
-	return p, nil
+	return creature, nil
 }

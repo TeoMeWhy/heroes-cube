@@ -5,7 +5,8 @@ export $(shell sed 's/=.*//' $(ENV_FILE))
 
 .PHONY: setup-db
 setup-db:
-	mysql -u $$DB_USER -p$$DB_PASS -h $$DB_HOST -D $$DB_NAME < data/people.sql;
+	cd heroes_cube/scripts; go run migrate.go;
+	mysql -u $$DB_USER -p$$DB_PASS -h $$DB_HOST -D $$DB_NAME < data/creatures.sql;
 	mysql -u $$DB_USER -p$$DB_PASS -h $$DB_HOST -D $$DB_NAME < data/races.sql;
 	mysql -u $$DB_USER -p$$DB_PASS -h $$DB_HOST -D $$DB_NAME < data/classes.sql;
 	mysql -u $$DB_USER -p$$DB_PASS -h $$DB_HOST -D $$DB_NAME < data/inventories.sql;
@@ -14,3 +15,7 @@ setup-db:
 .PHONY: setup
 setup: setup-db
 	@echo "Database setup complete."
+
+.PHONY: test
+test:
+	cd heroes_cube/models; go clean -testcache; go test . -v;
