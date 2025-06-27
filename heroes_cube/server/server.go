@@ -12,19 +12,10 @@ import (
 )
 
 type Server struct {
-	Port string
-	DB   *gorm.DB
-	App  *fiber.App
-}
-
-func (s *Server) setupRoutes() {
-
-	api := s.App.Group("/api/v1")
-
-	api.Get("/", func(c fiber.Ctx) error {
-		return c.JSON(fiber.Map{"message": "Heroes Cube API is running!", "status": "ok"})
-	})
-
+	Port       string
+	DB         *gorm.DB
+	App        *fiber.App
+	Controller *Controller
 }
 
 func (s *Server) setupMiddlewares() {
@@ -32,6 +23,23 @@ func (s *Server) setupMiddlewares() {
 	s.App.Use(logger.New(logger.Config{
 		Format: "[${ip}]:${port} ${status} - ${method} ${path}\n",
 	}))
+}
+
+func (s *Server) setupRoutes() {
+
+	api := s.App.Group("/api/v1")
+
+	api.Get("/", HealthCheckHandler)
+	api.Get("/status", HealthCheckHandler)
+
+	api.Get("/races", func(c fiber.Ctx) error {
+		races, err := s.Controller.GetRaces()
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Falha ao buscar raças"})
+		}
+		return c.JSON(races)
+	})
+
 }
 
 func (s *Server) Start() {
@@ -47,10 +55,20 @@ func NewServer(config *configs.Config) (*Server, error) {
 		return nil, err
 	}
 
+	controller := &Controller{
+		Db: db,
+	}
+
+	// Initialize the Fiber app
+	fiberApp := fiber.New(fiber.Config{
+		AppName: "Heroes Cube API",
+	})
+
 	server := &Server{
-		Port: config.ServerPort,
-		DB:   db,
-		App:  fiber.New(),
+		Port:       config.ServerPort,
+		DB:         db,
+		App:        fiberApp,
+		Controller: controller,
 	}
 
 	return server, nil
