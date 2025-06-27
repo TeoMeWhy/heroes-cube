@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"heroes_cube/clients/db"
 	"heroes_cube/configs"
+	"heroes_cube/models"
+	"log"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/logger"
@@ -88,6 +90,25 @@ func (s *Server) setupRoutes() {
 		return c.JSON(creature)
 	})
 
+	// Rota para criar criatura
+	api.Post("/creatures", func(c fiber.Ctx) error {
+
+		var payload PayloadPostCreature
+		if err := c.Bind().Body(&payload); err != nil {
+			log.Println(err)
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Dados inválidos"})
+		}
+
+		creature, err := s.Controller.PostCreature(payload)
+		if err != nil {
+			if err == models.ErrorCreatureAlreadyExists {
+				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Criatura já existe"})
+			}
+		}
+
+		return c.Status(fiber.StatusCreated).JSON(creature)
+
+	})
 }
 
 func (s *Server) Start() {

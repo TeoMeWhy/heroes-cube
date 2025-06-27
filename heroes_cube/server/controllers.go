@@ -49,3 +49,21 @@ func (controller *Controller) GetCreaturesByID(id string) (*models.Creature, err
 	}
 	return creature, nil
 }
+
+func (controller *Controller) PostCreature(payload PayloadPostCreature) (*models.Creature, error) {
+
+	_, err := models.GetCreature(controller.Db, payload.ID)
+	if err == nil {
+		return nil, models.ErrorCreatureAlreadyExists
+	}
+
+	creature, err := models.NewCreature(payload.ID, payload.Name, payload.Race, payload.Class, controller.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := creature.Save(controller.Db); err != nil {
+		return nil, err
+	}
+	return creature, nil
+}

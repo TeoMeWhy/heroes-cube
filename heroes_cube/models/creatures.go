@@ -4,6 +4,7 @@ import "gorm.io/gorm"
 
 type Creature struct {
 	Id              string     `json:"id" gorm:"primaryKey"`
+	Name            string     `json:"name" gorm:"type:varchar(100);not null"`
 	RaceName        string     `json:"race_name" gorm:"type:varchar(100);not null;"`
 	Race            Race       `json:"race" gorm:"foreignKey:RaceName;references:Name"`
 	ClassName       string     `json:"class_name" gorm:"type:varchar(100);not null;"`
@@ -100,7 +101,7 @@ func GetCreature(db *gorm.DB, id string) (*Creature, error) {
 	return creature, nil
 }
 
-func NewCreature(id, raceName, className string, db *gorm.DB) (*Creature, error) {
+func NewCreature(id, name, raceName, className string, db *gorm.DB) (*Creature, error) {
 
 	c, err := GetClass(db, className)
 	if err != nil {
@@ -114,6 +115,7 @@ func NewCreature(id, raceName, className string, db *gorm.DB) (*Creature, error)
 
 	creature := &Creature{
 		Id:              id,
+		Name:            name,
 		RaceName:        raceName,
 		ClassName:       className,
 		Race:            *r,

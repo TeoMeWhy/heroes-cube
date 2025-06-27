@@ -20,19 +20,19 @@ func TestCharsBaseDamage(t *testing.T) {
 	db, err := db.GetMySqlClient(conf)
 	assert.NoError(t, err)
 
-	creatureWarrior, err := NewCreature("Warrior", "humano", "guerreiro", db)
+	creatureWarrior, err := NewCreature("Warrior", "Warrior-humano", "humano", "guerreiro", db)
 	assert.NoError(t, err)
 	charWarrior := NewCharacter(creatureWarrior)
 
-	creatureRogue, err := NewCreature("Rogue", "humano", "ladino", db)
+	creatureRogue, err := NewCreature("Rogue", "Rogue-humano", "humano", "ladino", db)
 	assert.NoError(t, err)
 	charRogue := NewCharacter(creatureRogue)
 
-	creatureMage, err := NewCreature("Mage", "humano", "mago", db)
+	creatureMage, err := NewCreature("Mage", "Mage-humano", "humano", "mago", db)
 	assert.NoError(t, err)
 	charMage := NewCharacter(creatureMage)
 
-	creatureCleric, err := NewCreature("Cleric", "humano", "clérigo", db)
+	creatureCleric, err := NewCreature("Cleric", "Cleric-humano", "humano", "clérigo", db)
 	assert.NoError(t, err)
 	charCleric := NewCharacter(creatureCleric)
 
@@ -101,25 +101,25 @@ func TestCharsBaseDamageWithItems(t *testing.T) {
 	cajadoVida, err := GetItem(db, "14")
 	assert.NoError(t, err)
 
-	creatureWarrior, err := NewCreature("Warrior", "humano", "guerreiro", db)
+	creatureWarrior, err := NewCreature("Warrior", "Warrior-humano", "humano", "guerreiro", db)
 	assert.NoError(t, err)
 	err = creatureWarrior.Inventory.AddItem(*espadaLonga)
 	assert.NoError(t, err)
 	charWarrior := NewCharacter(creatureWarrior)
 
-	creatureRogue, err := NewCreature("Rogue", "humano", "ladino", db)
+	creatureRogue, err := NewCreature("Rogue", "Rogue-humano", "humano", "ladino", db)
 	assert.NoError(t, err)
 	err = creatureRogue.Inventory.AddItem(*botasAgilidade)
 	assert.NoError(t, err)
 	charRogue := NewCharacter(creatureRogue)
 
-	creatureMage, err := NewCreature("Mage", "humano", "mago", db)
+	creatureMage, err := NewCreature("Mage", "Mage-humano", "humano", "mago", db)
 	assert.NoError(t, err)
 	err = creatureMage.Inventory.AddItem(*cajadoFogo)
 	assert.NoError(t, err)
 	charMage := NewCharacter(creatureMage)
 
-	creatureCleric, err := NewCreature("Cleric", "humano", "clérigo", db)
+	creatureCleric, err := NewCreature("Cleric", "Cleric-humano", "humano", "clérigo", db)
 	assert.NoError(t, err)
 	err = creatureCleric.Inventory.AddItem(*cajadoVida)
 	assert.NoError(t, err)
@@ -190,25 +190,25 @@ func TestCharsSpecialAbility(t *testing.T) {
 	cajadoVida, err := GetItem(db, "14")
 	assert.NoError(t, err)
 
-	creatureWarrior, err := NewCreature("Warrior", "humano", "guerreiro", db)
+	creatureWarrior, err := NewCreature("Warrior", "Warrior-humano", "humano", "guerreiro", db)
 	assert.NoError(t, err)
 	err = creatureWarrior.Inventory.AddItem(*espadaLonga)
 	assert.NoError(t, err)
 	charWarrior := NewCharacter(creatureWarrior)
 
-	creatureRogue, err := NewCreature("Rogue", "humano", "ladino", db)
+	creatureRogue, err := NewCreature("Rogue", "Rogue-humano", "humano", "ladino", db)
 	assert.NoError(t, err)
 	err = creatureRogue.Inventory.AddItem(*botasAgilidade)
 	assert.NoError(t, err)
 	charRogue := NewCharacter(creatureRogue)
 
-	creatureMage, err := NewCreature("Mage", "humano", "mago", db)
+	creatureMage, err := NewCreature("Mage", "Mage-humano", "humano", "mago", db)
 	assert.NoError(t, err)
 	err = creatureMage.Inventory.AddItem(*cajadoFogo)
 	assert.NoError(t, err)
 	charMage := NewCharacter(creatureMage)
 
-	creatureCleric, err := NewCreature("Cleric", "humano", "clérigo", db)
+	creatureCleric, err := NewCreature("Cleric", "Cleric-humano", "humano", "clérigo", db)
 	assert.NoError(t, err)
 	err = creatureCleric.Inventory.AddItem(*cajadoVida)
 	assert.NoError(t, err)

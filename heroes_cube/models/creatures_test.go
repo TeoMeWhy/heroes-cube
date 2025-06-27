@@ -86,7 +86,7 @@ func TestImportPerson(t *testing.T) {
 
 	for i, tt := range cases {
 		t.Run(tt.name, func(t *testing.T) {
-			creature, err := NewCreature(fmt.Sprintf("%d", i), tt.RaceName, tt.ClassName, db)
+			creature, err := NewCreature(fmt.Sprintf("%d", i), "", tt.RaceName, tt.ClassName, db)
 			assert.Equal(t, tt.expectedClassName, creature.ClassName)
 			assert.Equal(t, tt.expectedStrength, creature.PtsStrength)
 			assert.Equal(t, tt.expectedDexterity, creature.PtsDexterity)
