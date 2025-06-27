@@ -1,6 +1,10 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"math"
+
+	"gorm.io/gorm"
+)
 
 type Creature struct {
 	Id              string     `json:"id" gorm:"primaryKey"`
@@ -14,6 +18,8 @@ type Creature struct {
 	PtsIntelligence int        `json:"pts_intelligence" gorm:"not null;type:int"`
 	PtsWisdom       int        `json:"pts_wisdom" gorm:"not null;type:int"`
 	PtsHitPoints    int        `json:"pts_hit_points" gorm:"not null;type:int"`
+	PtsExperience   int        `json:"pts_experience" gorm:"not null;type:int"`
+	PtsSkill        int        `json:"pts_skill" gorm:"not null;type:int"`
 	InventoryId     string     `json:"inventory_id" gorm:"type:varchar(100);not null;unique"`
 	Inventory       *Inventory `json:"inventory" gorm:"foreignKey:InventoryId;references:Id"`
 }
@@ -55,6 +61,17 @@ func (creature *Creature) GetWisdom() int {
 	}
 
 	return creature.PtsWisdom + creature.Race.ModWisdom + itemsWisdom
+}
+
+func (creature *Creature) GetLevel(pts int) int {
+	return int(math.Pow(float64(pts/1000), 0.5) + 1.5)
+}
+
+func (creature *Creature) CheckLvlUp(pts int) bool {
+
+	lvlNow := creature.GetLevel(creature.PtsExperience)
+	lvlNext := creature.GetLevel(creature.PtsExperience + pts)
+	return lvlNow < lvlNext
 }
 
 func (creature *Creature) SetHitPoints() {
