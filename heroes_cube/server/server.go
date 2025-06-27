@@ -40,6 +40,14 @@ func (s *Server) setupRoutes() {
 		return c.JSON(races)
 	})
 
+	api.Get("/classes", func(c fiber.Ctx) error {
+		classes, err := s.Controller.GetClasses()
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Falha ao buscar classes"})
+		}
+		return c.JSON(classes)
+	})
+
 }
 
 func (s *Server) Start() {

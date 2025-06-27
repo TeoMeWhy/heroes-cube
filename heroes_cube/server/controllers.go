@@ -17,3 +17,11 @@ func (controller *Controller) GetRaces() ([]models.Race, error) {
 	}
 	return races, nil
 }
+
+func (controller *Controller) GetClasses() ([]models.Class, error) {
+	classes := []models.Class{}
+	if err := controller.Db.Find(&classes).Error; err != nil {
+		return nil, err
+	}
+	return classes, nil
+}
