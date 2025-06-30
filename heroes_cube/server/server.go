@@ -109,6 +109,43 @@ func (s *Server) setupRoutes() {
 		return c.Status(fiber.StatusCreated).JSON(creature)
 
 	})
+
+	// Rota para deletar criatura
+	api.Delete("/creatures/:id", func(c fiber.Ctx) error {
+		id := c.Params("id")
+		if err := s.Controller.DeleteCreature(id); err != nil {
+			if err == gorm.ErrRecordNotFound {
+				msg := fmt.Sprintf("Criatura com ID %s não encontrada", id)
+				return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": msg})
+			}
+			msg := fmt.Sprintf("Falha ao deletar criatura com ID %s - %s", id, err.Error())
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": msg})
+		}
+		c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Criatura deletada com sucesso"})
+		return nil
+	})
+
+	// Rota criar item no inventário
+	api.Post("/inventory/:id_inventory/item/", func(c fiber.Ctx) error {
+		idInventory := c.Params("id_inventory")
+		payload := PayloadPostInventoryItem{}
+		if err := c.Bind().Body(&payload); err != nil {
+			c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Dados inválidos"})
+		}
+
+		if err := s.Controller.PostInventoryItem(idInventory, payload.ItemID); err != nil {
+			if err == models.ErrorItemIdNotFoundOnInventory {
+				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Item não encontrado no inventário"})
+			}
+			if err == models.ErrorItemTypeAlreadyExists {
+				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Tipo de item já existe no inventário. Remova o tipo para adicionar novo item"})
+			}
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Falha ao adicionar item ao inventário"})
+		}
+
+		return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Item adicionado ao inventário com sucesso"})
+	})
+
 }
 
 func (s *Server) Start() {

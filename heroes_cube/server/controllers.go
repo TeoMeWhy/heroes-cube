@@ -34,10 +34,16 @@ func (controller *Controller) GetItems() ([]models.Item, error) {
 	return items, nil
 }
 
-func (controller *Controller) GetCreatures() ([]models.Creature, error) {
-	creatures := []models.Creature{}
-	if err := controller.Db.Find(&creatures).Error; err != nil {
+func (controller *Controller) GetCreatures() ([]BaseCreature, error) {
+
+	creatures := []BaseCreature{}
+	modelCreatures := []models.Creature{}
+	if err := controller.Db.Find(&modelCreatures).Error; err != nil {
 		return nil, err
+	}
+
+	for _, c := range modelCreatures {
+		creatures = append(creatures, BaseCreatureFromModel(c))
 	}
 	return creatures, nil
 }
@@ -66,4 +72,35 @@ func (controller *Controller) PostCreature(payload PayloadPostCreature) (*models
 		return nil, err
 	}
 	return creature, nil
+}
+
+func (controller *Controller) DeleteCreature(id string) error {
+
+	creature, err := models.GetCreature(controller.Db, id)
+	if err != nil {
+		return err
+	}
+
+	return controller.Db.Delete(creature).Error
+}
+
+func (controller *Controller) PostInventoryItem(inventory_id, item_id string) error {
+
+	inventory, err := models.GetInventory(controller.Db, inventory_id)
+	if err != nil {
+		return err
+	}
+
+	item, err := models.GetItem(controller.Db, item_id)
+	if err != nil {
+		return err
+	}
+
+	if err := inventory.AddItem(*item); err != nil {
+		return err
+	}
+
+	inventory.Save(controller.Db)
+	return nil
+
 }
