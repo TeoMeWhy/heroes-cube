@@ -19,3 +19,8 @@ setup: setup-db
 .PHONY: test
 test:
 	cd heroes_cube/models; go clean -testcache; go test . -v;
+
+
+.PHONY: run
+run:
+	cd heroes_cube; go run main.go;
