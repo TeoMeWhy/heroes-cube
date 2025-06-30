@@ -115,6 +115,8 @@ func GetCreature(db *gorm.DB, id string) (*Creature, error) {
 		return nil, err
 	}
 
+	creature.Inventory.SetSelloutItensPrice()
+
 	return creature, nil
 }
 

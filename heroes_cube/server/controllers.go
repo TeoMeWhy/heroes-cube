@@ -53,6 +53,7 @@ func (controller *Controller) GetCreaturesByID(id string) (*models.Creature, err
 	if err != nil {
 		return nil, err
 	}
+
 	return creature, nil
 }
 
@@ -100,7 +101,32 @@ func (controller *Controller) PostInventoryItem(inventory_id, item_id string) er
 		return err
 	}
 
-	inventory.Save(controller.Db)
-	return nil
+	return inventory.Save(controller.Db)
+
+}
+
+func (controller *Controller) DeleteInventoryItem(inventory_id, item_id string) (*models.Item, error) {
+
+	inventory, err := models.GetInventory(controller.Db, inventory_id)
+	if err != nil {
+		return nil, err
+	}
+
+	item, err := models.GetItem(controller.Db, item_id)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := inventory.RemoveItem(*item); err != nil {
+		return nil, err
+	}
+
+	if err := inventory.Save(controller.Db); err != nil {
+		return nil, err
+	}
+
+	item.SetSelloutPrice()
+
+	return item, nil
 
 }

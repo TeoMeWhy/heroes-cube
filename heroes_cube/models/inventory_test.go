@@ -116,7 +116,7 @@ func TestInventoryRemoveItem(t *testing.T) {
 	for _, tt := range pairTests {
 		t.Run(tt.name, func(t *testing.T) {
 			for _, item := range tt.items {
-				err := tt.inventory.RemoveItem(item.Id)
+				err := tt.inventory.RemoveItem(item)
 				assert.ErrorIs(t, err, tt.expectError)
 			}
 		})

@@ -24,3 +24,7 @@ func GetItem(db *gorm.DB, id string) (*Item, error) {
 	}
 	return item, nil
 }
+
+func (i *Item) SetSelloutPrice() {
+	i.Price = i.Price / 2
+}

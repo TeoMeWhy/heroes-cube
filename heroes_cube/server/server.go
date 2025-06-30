@@ -5,8 +5,8 @@ import (
 	"heroes_cube/clients/db"
 	"heroes_cube/configs"
 	"heroes_cube/models"
-	"log"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/logger"
 	"github.com/gofiber/fiber/v3/middleware/recover"
@@ -19,6 +19,7 @@ type Server struct {
 	DB         *gorm.DB
 	App        *fiber.App
 	Controller *Controller
+	Validate   *validator.Validate
 }
 
 func (s *Server) setupMiddlewares() {
@@ -26,6 +27,7 @@ func (s *Server) setupMiddlewares() {
 	s.App.Use(logger.New(logger.Config{
 		Format: "[${ip}]:${port} ${status} - ${method} ${path}\n",
 	}))
+
 }
 
 func (s *Server) setupRoutes() {
@@ -95,8 +97,11 @@ func (s *Server) setupRoutes() {
 
 		var payload PayloadPostCreature
 		if err := c.Bind().Body(&payload); err != nil {
-			log.Println(err)
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Dados inválidos"})
+		}
+
+		if err := s.Validate.Struct(&payload); err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Dados inválidos", "details": err.Error()})
 		}
 
 		creature, err := s.Controller.PostCreature(payload)
@@ -126,11 +131,17 @@ func (s *Server) setupRoutes() {
 	})
 
 	// Rota criar item no inventário
-	api.Post("/inventory/:id_inventory/item/", func(c fiber.Ctx) error {
+	api.Post("/inventory/:id_inventory/item", func(c fiber.Ctx) error {
+
 		idInventory := c.Params("id_inventory")
+
 		payload := PayloadPostInventoryItem{}
 		if err := c.Bind().Body(&payload); err != nil {
-			c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Dados inválidos"})
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Dados inválidos"})
+		}
+
+		if err := s.Validate.Struct(&payload); err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Dados inválidos", "details": err.Error()})
 		}
 
 		if err := s.Controller.PostInventoryItem(idInventory, payload.ItemID); err != nil {
@@ -144,6 +155,22 @@ func (s *Server) setupRoutes() {
 		}
 
 		return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Item adicionado ao inventário com sucesso"})
+	})
+
+	api.Delete("/inventory/:id_inventory/item/:item_id", func(c fiber.Ctx) error {
+		idInventory := c.Params("id_inventory")
+		itemID := c.Params("item_id")
+
+		item, err := s.Controller.DeleteInventoryItem(idInventory, itemID)
+		if err != nil {
+			if err == models.ErrorItemIdNotFoundOnInventory {
+				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Item não encontrado no inventário"})
+			}
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Falha ao remover item do inventário"})
+		}
+
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{"item": item})
+
 	})
 
 }
@@ -173,11 +200,14 @@ func NewServer(config *configs.Config) (*Server, error) {
 		AppName: "Heroes Cube API",
 	})
 
+	validate := validator.New()
+
 	server := &Server{
 		Port:       config.ServerPort,
 		DB:         db,
 		App:        fiberApp,
 		Controller: controller,
+		Validate:   validate,
 	}
 
 	return server, nil

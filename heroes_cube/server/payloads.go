@@ -3,7 +3,7 @@ package server
 import "heroes_cube/models"
 
 type PayloadPostInventoryItem struct {
-	ItemID string `json:"item_id" validate:"required"`
+	ItemID string `json:"id" validate:"required"`
 }
 
 type PayloadPostCreature struct {

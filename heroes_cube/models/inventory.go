@@ -30,10 +30,10 @@ func (i *Inventory) AddItem(item Item) error {
 	return nil
 }
 
-func (i *Inventory) RemoveItem(id string) error {
+func (i *Inventory) RemoveItem(item Item) error {
 
 	for ix, v := range i.Items {
-		if v.Id == id {
+		if v.Id == item.Id {
 			i.Items = slices.Delete(i.Items, ix, ix+1)
 			return nil
 		}
@@ -54,11 +54,26 @@ func (i *Inventory) Save(db *gorm.DB) error {
 	return nil
 }
 
+func (i *Inventory) SetSelloutItensPrice() {
+
+	items := []Item{}
+	for _, item := range i.Items {
+		item.SetSelloutPrice()
+		items = append(items, item)
+	}
+
+	i.Items = items
+
+}
+
 func GetInventory(db *gorm.DB, id string) (*Inventory, error) {
+
 	inv := &Inventory{Id: id}
 	if err := db.Preload("Items").First(inv).Error; err != nil {
 		return nil, err
 	}
+
+	inv.SetSelloutItensPrice()
 	return inv, nil
 }
 
