@@ -6,6 +6,13 @@ import (
 	"gorm.io/gorm"
 )
 
+type SkillPoints struct {
+	Strength     int `json:"strength"`
+	Dexterity    int `json:"dexterity"`
+	Intelligence int `json:"intelligence"`
+	Wisdom       int `json:"wisdom"`
+}
+
 type Creature struct {
 	Id              string     `json:"id" gorm:"primaryKey"`
 	Name            string     `json:"name" gorm:"type:varchar(100);not null"`
@@ -67,11 +74,24 @@ func (creature *Creature) GetLevel(pts int) int {
 	return int(math.Pow(float64(pts/1000), 0.5) + 1.5)
 }
 
-func (creature *Creature) CheckLvlUp(pts int) bool {
-
+func (creature *Creature) DiffLvlUp(pts int) int {
 	lvlNow := creature.GetLevel(creature.PtsExperience)
 	lvlNext := creature.GetLevel(creature.PtsExperience + pts)
-	return lvlNow < lvlNext
+	return lvlNext - lvlNow
+}
+
+func (creature *Creature) AddLvlPoints(pts int) {
+	diffLvl := creature.DiffLvlUp(pts)
+	creature.PtsExperience += pts
+	creature.PtsSkill += diffLvl
+}
+
+func (creature *Creature) AddSkillPoints(points SkillPoints) {
+	creature.PtsStrength += points.Strength
+	creature.PtsDexterity += points.Dexterity
+	creature.PtsIntelligence += points.Intelligence
+	creature.PtsWisdom += points.Wisdom
+	creature.SetHitPoints()
 }
 
 func (creature *Creature) SetHitPoints() {

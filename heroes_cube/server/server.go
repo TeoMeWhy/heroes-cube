@@ -130,6 +130,58 @@ func (s *Server) setupRoutes() {
 		return nil
 	})
 
+	api.Post("/creatures/:id/add_exp", func(c fiber.Ctx) error {
+
+		id := c.Params("id")
+		var payload PayloadAddExp
+		if err := c.Bind().Body(&payload); err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Dados inválidos"})
+		}
+
+		if err := s.Validate.Struct(&payload); err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Dados inválidos", "details": err.Error()})
+		}
+
+		creature, err := s.Controller.AddExpPoints(id, payload.ExpPoins)
+		if err != nil {
+			if err == gorm.ErrRecordNotFound {
+				msg := fmt.Sprintf("Criatura com ID %s não encontrada", id)
+				return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": msg})
+			}
+			msg := fmt.Sprintf("Falha ao adicionar pontos de experiência - %s", err.Error())
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": msg})
+		}
+
+		c.Status(fiber.StatusOK).JSON(creature)
+		return nil
+	})
+
+	api.Post("/creatures/:id/add_skill_points", func(c fiber.Ctx) error {
+
+		id := c.Params("id")
+		var payload models.SkillPoints
+		if err := c.Bind().Body(&payload); err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Dados inválidos"})
+		}
+
+		if err := s.Validate.Struct(&payload); err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Dados inválidos", "details": err.Error()})
+		}
+
+		creature, err := s.Controller.AddSkillPoints(id, payload)
+		if err != nil {
+			if err == gorm.ErrRecordNotFound {
+				msg := fmt.Sprintf("Criatura com ID %s não encontrada", id)
+				return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": msg})
+			}
+			msg := fmt.Sprintf("Falha ao adicionar pontos de habilidade - %s", err.Error())
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": msg})
+		}
+
+		c.Status(fiber.StatusOK).JSON(creature)
+		return nil
+	})
+
 	// Rota criar item no inventário
 	api.Post("/inventory/:id_inventory/item", func(c fiber.Ctx) error {
 

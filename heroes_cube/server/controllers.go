@@ -85,6 +85,43 @@ func (controller *Controller) DeleteCreature(id string) error {
 	return controller.Db.Delete(creature).Error
 }
 
+func (controller *Controller) AddExpPoints(id string, pts int) (*models.Creature, error) {
+
+	creature, err := models.GetCreature(controller.Db, id)
+	if err != nil {
+		return nil, err
+	}
+
+	creature.AddLvlPoints(pts)
+
+	if err := creature.Save(controller.Db); err != nil {
+		return nil, err
+	}
+
+	return creature, nil
+}
+
+func (controller *Controller) AddSkillPoints(id string, points models.SkillPoints) (*models.Creature, error) {
+
+	creature, err := models.GetCreature(controller.Db, id)
+	if err != nil {
+		return nil, err
+	}
+	tt := points.Strength + points.Dexterity + points.Intelligence + points.Wisdom
+	if tt > creature.PtsSkill {
+		return nil, models.ErrorNotEnoughSkillPoints
+	}
+
+	creature.AddSkillPoints(points)
+	creature.PtsSkill -= tt
+
+	if err := creature.Save(controller.Db); err != nil {
+		return nil, err
+	}
+
+	return creature, nil
+}
+
 func (controller *Controller) PostInventoryItem(inventory_id, item_id string) error {
 
 	inventory, err := models.GetInventory(controller.Db, inventory_id)

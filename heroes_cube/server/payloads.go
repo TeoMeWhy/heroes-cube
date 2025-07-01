@@ -6,6 +6,10 @@ type PayloadPostInventoryItem struct {
 	ItemID string `json:"id" validate:"required"`
 }
 
+type PayloadAddExp struct {
+	ExpPoins int `json:"exp_points" validate:"required"`
+}
+
 type PayloadPostCreature struct {
 	ID    string `json:"id" validate:"required"`
 	Name  string `json:"name" validate:"required"`
