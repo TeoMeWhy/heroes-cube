@@ -108,6 +108,10 @@ func (s *Server) setupRoutes() {
 		if err != nil {
 			if err == models.ErrorCreatureAlreadyExists {
 				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Criatura já existe"})
+			} else if err == models.ErrorRaceNotFound {
+				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Raça não encontrada"})
+			} else if err == models.ErrorClassNotFound {
+				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Classe não encontrada"})
 			}
 		}
 

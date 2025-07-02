@@ -144,11 +144,17 @@ func NewCreature(id, name, raceName, className string, db *gorm.DB) (*Creature, 
 
 	c, err := GetClass(db, className)
 	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, ErrorClassNotFound
+		}
 		return nil, err
 	}
 
 	r, err := GetRace(db, raceName)
 	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, ErrorRaceNotFound
+		}
 		return nil, err
 	}
 
