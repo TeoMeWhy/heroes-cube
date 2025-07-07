@@ -1,27 +1,29 @@
 package main
 
 import (
+	"heroes_cube/clients/db"
+	"heroes_cube/configs"
 	"heroes_cube/models"
 	"log"
-	"os"
 
 	"github.com/joho/godotenv"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
 func main() {
 
 	godotenv.Load("../../.env")
 
-	dsn := os.Getenv("MYSQL_DSN")
-
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	conf, err := configs.LoadConfig()
 	if err != nil {
-		log.Fatal("Erro ao conectar no banco:", err)
+		log.Fatal(err)
 	}
 
-	db.AutoMigrate(
+	con, err := db.GetMySqlClient(*conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	con.AutoMigrate(
 		models.Creature{},
 		models.Race{},
 		models.Class{},
