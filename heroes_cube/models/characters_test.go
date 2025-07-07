@@ -106,24 +106,36 @@ func TestCharsBaseDamageWithItems(t *testing.T) {
 	err = creatureWarrior.Inventory.AddItem(*espadaLonga)
 	assert.NoError(t, err)
 	charWarrior := NewCharacter(creatureWarrior)
+	// força = 1 + 5 + 3
+	// dano = 7
+	// dano total = 16
 
 	creatureRogue, err := NewCreature("Rogue", "Rogue-humano", "humano", "ladino", db)
 	assert.NoError(t, err)
 	err = creatureRogue.Inventory.AddItem(*botasAgilidade)
 	assert.NoError(t, err)
 	charRogue := NewCharacter(creatureRogue)
+	// destreza = 1 + 1 + 6
+	// dano = 0
+	// dano total = 8
 
 	creatureMage, err := NewCreature("Mage", "Mage-humano", "humano", "mago", db)
 	assert.NoError(t, err)
 	err = creatureMage.Inventory.AddItem(*cajadoFogo)
 	assert.NoError(t, err)
 	charMage := NewCharacter(creatureMage)
+	// inteligencia = 1 + 6 + 4
+	// dano = 10
+	// dano total = 21
 
 	creatureCleric, err := NewCreature("Cleric", "Cleric-humano", "humano", "clérigo", db)
 	assert.NoError(t, err)
 	err = creatureCleric.Inventory.AddItem(*cajadoVida)
 	assert.NoError(t, err)
 	charCleric := NewCharacter(creatureCleric)
+	// sabedoria = 1 + 6 + 4
+	// dano = 12
+	// dano total = 23
 
 	pairTests := []struct {
 		name           string
@@ -140,19 +152,19 @@ func TestCharsBaseDamageWithItems(t *testing.T) {
 		{
 			name:           "Rogue Base Damage",
 			char:           charRogue,
-			expectedDamage: 9,
+			expectedDamage: 8,
 			expectError:    nil,
 		},
 		{
 			name:           "Mage Base Damage",
 			char:           charMage,
-			expectedDamage: 19,
+			expectedDamage: 21,
 			expectError:    nil,
 		},
 		{
 			name:           "Cleric Base Damage",
 			char:           charCleric,
-			expectedDamage: 16,
+			expectedDamage: 23,
 			expectError:    nil,
 		},
 	}
@@ -229,19 +241,19 @@ func TestCharsSpecialAbility(t *testing.T) {
 		{
 			name:           "Rogue Base Damage",
 			char:           charRogue,
-			expectedDamage: 17,
+			expectedDamage: 14,
 			expectError:    nil,
 		},
 		{
 			name:           "Mage Base Damage",
 			char:           charMage,
-			expectedDamage: 28,
+			expectedDamage: 32,
 			expectError:    nil,
 		},
 		{
 			name:           "Cleric Base Damage",
 			char:           charCleric,
-			expectedDamage: 18,
+			expectedDamage: 22,
 			expectError:    nil,
 		},
 	}
