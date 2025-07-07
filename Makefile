@@ -22,7 +22,7 @@ test:
 	cd heroes_cube/models; go clean -testcache; go test . -v;
 
 .PHONY: build
-build: setup
+build:
 	cd heroes_cube; go mod tidy; go build -o heroes_cube main.go; chmod +x heroes_cube;
 
 .PHONY: run
