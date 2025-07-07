@@ -11,3 +11,15 @@ services:
     volumes:
       - ./data/mysql-data:/var/lib/mysql
     restart: always
+
+  heroes_cube:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+        - "8080:8080"
+    restart: always
+    depends_on:
+      - mysql
