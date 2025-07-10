@@ -98,6 +98,26 @@ func (creature *Creature) SetHitPoints() {
 	creature.PtsHitPoints = 10 + creature.GetStrength()
 }
 
+func (c *Creature) EquipeItem(item Item) error {
+
+	if err := c.Inventory.AddItem(item); err != nil {
+		return err
+	}
+
+	c.SetHitPoints()
+	return nil
+}
+
+func (c *Creature) UnequipeItem(item Item) error {
+
+	if err := c.Inventory.RemoveItem(item); err != nil {
+		return err
+	}
+
+	c.SetHitPoints()
+	return nil
+}
+
 func (creature *Creature) GetInventoryDamage() int {
 
 	itemsDamage := 0

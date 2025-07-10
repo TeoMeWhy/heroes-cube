@@ -124,7 +124,7 @@ func (controller *Controller) AddSkillPoints(id string, points models.SkillPoint
 
 func (controller *Controller) PostInventoryItem(inventory_id, item_id string) error {
 
-	inventory, err := models.GetInventory(controller.Db, inventory_id)
+	char, err := controller.GetCreaturesByID(inventory_id)
 	if err != nil {
 		return err
 	}
@@ -134,26 +134,16 @@ func (controller *Controller) PostInventoryItem(inventory_id, item_id string) er
 		return err
 	}
 
-	if err := inventory.AddItem(*item); err != nil {
+	if err := char.EquipeItem(*item); err != nil {
 		return err
 	}
 
-	if err := inventory.Save(controller.Db); err != nil {
-		return err
-	}
-
-	char, err := controller.GetCreaturesByID(inventory.Id)
-	if err != nil {
-		return err
-	}
-
-	char.SetHitPoints()
 	return char.Save(controller.Db)
 }
 
 func (controller *Controller) DeleteInventoryItem(inventory_id, item_id string) (*models.Item, error) {
 
-	inventory, err := models.GetInventory(controller.Db, inventory_id)
+	char, err := controller.GetCreaturesByID(inventory_id)
 	if err != nil {
 		return nil, err
 	}
@@ -163,20 +153,10 @@ func (controller *Controller) DeleteInventoryItem(inventory_id, item_id string) 
 		return nil, err
 	}
 
-	if err := inventory.RemoveItem(*item); err != nil {
+	if err := char.UnequipeItem(*item); err != nil {
 		return nil, err
 	}
 
-	if err := inventory.Save(controller.Db); err != nil {
-		return nil, err
-	}
-
-	char, err := controller.GetCreaturesByID(inventory.Id)
-	if err != nil {
-		return nil, err
-	}
-
-	char.SetHitPoints()
 	if err := char.Save(controller.Db); err != nil {
 		return nil, err
 	}
