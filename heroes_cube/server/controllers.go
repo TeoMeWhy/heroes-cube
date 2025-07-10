@@ -171,6 +171,16 @@ func (controller *Controller) DeleteInventoryItem(inventory_id, item_id string) 
 		return nil, err
 	}
 
+	char, err := controller.GetCreaturesByID(inventory.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	char.SetHitPoints()
+	if err := char.Save(controller.Db); err != nil {
+		return nil, err
+	}
+
 	item.SetSelloutPrice()
 
 	return item, nil
