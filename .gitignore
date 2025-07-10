@@ -1,3 +1,5 @@
 *.env
 mysql-data/
 .vscode/
+
+heroes_cube/heroes_cube

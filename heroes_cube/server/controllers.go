@@ -138,8 +138,17 @@ func (controller *Controller) PostInventoryItem(inventory_id, item_id string) er
 		return err
 	}
 
-	return inventory.Save(controller.Db)
+	if err := inventory.Save(controller.Db); err != nil {
+		return err
+	}
 
+	char, err := controller.GetCreaturesByID(inventory.Id)
+	if err != nil {
+		return err
+	}
+
+	char.SetHitPoints()
+	return char.Save(controller.Db)
 }
 
 func (controller *Controller) DeleteInventoryItem(inventory_id, item_id string) (*models.Item, error) {
