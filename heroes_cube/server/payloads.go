@@ -17,6 +17,11 @@ type PayloadPostCreature struct {
 	Class string `json:"class" validate:"required"`
 }
 
+type PayloadDamageCreature struct {
+	BaseDamage    int `json:"base_damage"`
+	SpecialDamage int `json:"special_damage"`
+}
+
 type BaseCreature struct {
 	Id              string `json:"id"`
 	Name            string `json:"name"`

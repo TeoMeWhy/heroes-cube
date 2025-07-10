@@ -92,6 +92,23 @@ func (s *Server) setupRoutes() {
 		return c.JSON(creature)
 	})
 
+	// Rota para buscar dano da criatura por ID
+	api.Get("/creatures/:id/damage", func(c fiber.Ctx) error {
+		id := c.Params("id")
+		damage, err := s.Controller.GetCreatureDamage(id)
+		if err != nil {
+
+			if err == gorm.ErrRecordNotFound {
+				msg := fmt.Sprintf("Criatura com ID %s não encontrada", id)
+				return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": msg})
+			}
+
+			msg := fmt.Sprintf("Falha ao obter o dano da criatura com ID %s - %s", id, err.Error())
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": msg})
+		}
+		return c.JSON(damage)
+	})
+
 	// Rota para criar criatura
 	api.Post("/creatures", func(c fiber.Ctx) error {
 

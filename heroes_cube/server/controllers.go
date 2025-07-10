@@ -166,3 +166,22 @@ func (controller *Controller) DeleteInventoryItem(inventory_id, item_id string) 
 	return item, nil
 
 }
+
+func (controller *Controller) GetCreatureDamage(id string) (*PayloadDamageCreature, error) {
+	creature, err := controller.GetCreaturesByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	char := models.NewCharacter(creature)
+
+	baseDamage := char.BaseDamage()
+	specialDamage := char.GetSpecialAbility()
+
+	damage := &PayloadDamageCreature{
+		BaseDamage:    baseDamage,
+		SpecialDamage: specialDamage,
+	}
+
+	return damage, nil
+}
