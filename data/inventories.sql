@@ -1,2 +1,2 @@
-DELETE FROM inventory_items;
-DELETE FROM inventories;
+DELETE FROM heroes.inventory_items;
+DELETE FROM heroes.inventories;

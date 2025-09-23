@@ -1,6 +1,6 @@
-DELETE FROM items;
+DELETE FROM heroes.items;
 
-INSERT INTO items (
+INSERT INTO heroes.items (
     id, name, description, category, type, weight, price, damage, mod_strength, mod_dexterity, mod_intelligence, mod_wisdom
 ) VALUES
 (1,'Espada Longa','Uma espada longa de aço.','espada','arma',5,1500,7,3,0,0,0),

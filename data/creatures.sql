@@ -1,1 +1,1 @@
-DELETE FROM creatures;
+DELETE FROM heroes.creatures;

@@ -1,6 +1,6 @@
-DELETE FROM classes;
+DELETE FROM heroes.classes;
 
-INSERT INTO classes (
+INSERT INTO heroes.classes (
     name,
     description,
     initial_strength,
